@@ -43,6 +43,12 @@
     </div>
 
     <script>
+
+        //将字符串进行封装（字符串不能绑定事件）
+        //将字符串转化成dom元素
+        //提取公共的类，如果想渲染dom ，可以通过setState
+        //模拟实现一个渲染方法
+
         class Component{
             createDomFromSting(str){
                 let oDiv = document.createElement('div');
@@ -62,6 +68,9 @@
                 this.ele.firstElementChild.addEventListener('change',this.change.bind(this),false)
                 return this.ele;
             }
+            mount(container){
+                container.appendChild(this._render())
+            }
         }
         class Switch extends Component{
             constructor(){
@@ -71,7 +80,9 @@
             
            
             change(){
-                this.setState({turn:!this.state.turn})
+                setTimeout(()=>{
+                    this.setState({turn:!this.state.turn})
+                },300)              
             }
             render(){
                 
@@ -83,10 +94,10 @@
         }
 
         let app = document.querySelector('#app');
-
-        app.appendChild(new Switch()._render());
-        app.appendChild(new Switch()._render());
-
+        let render = (ele,container)=>{
+            ele.mount(container);
+        }
+        render(new Switch(),app)
     </script>
 
 </body>

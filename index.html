@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Switch Component</title>
+    <style>
+        .switch{
+            -webkit-appearance: none;
+            width: 50px;
+            height: 32px;
+            border: 1px solid #dfdfdf;
+            border-radius: 30px;
+            position: relative;
+            outline: none; 
+            transition: all 0.2s linear;
+        }
+        .switch:checked{
+            transition: all 0.2s linear;
+            box-shadow: lawngreen 0 0 16px 16px inset; 
+        }
+        .switch:before{
+            content: '';
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 50%;
+            box-shadow: 1px 1px 2px 0 #dfdfdf;
+            background: #fff;
+            transition:all 0.2s linear;
+        }
+        .switch:checked:before{
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        
+    </div>
+
+    <script>
+        class Component{
+            createDomFromSting(str){
+                let oDiv = document.createElement('div');
+                oDiv.innerHTML = str;
+                return oDiv.firstElementChild;
+            }
+            setState(newState){
+                Object.assign(this.state,newState)
+                //this.state.turn = !this.state.turn
+                console.log(this.state)
+                let oldEle = this.ele;
+                let newEle = this._render();
+                oldEle.parentNode.replaceChild(newEle,oldEle);
+            }
+            _render(){
+                this.ele = this.createDomFromSting(this.render())
+                this.ele.firstElementChild.addEventListener('change',this.change.bind(this),false)
+                return this.ele;
+            }
+        }
+        class Switch extends Component{
+            constructor(){
+                super();
+                this.state = {turn:true,'a':1}
+            }
+            
+           
+            change(){
+                this.setState({turn:!this.state.turn})
+            }
+            render(){
+                
+                return `<div>
+                    <input type="checkbox" class="switch" ${this.state.turn?'checked':''} >
+                    <p class="text">${this.state.turn?'开':'关'}</p>
+                </div>`
+            }
+        }
+
+        let app = document.querySelector('#app');
+
+        app.appendChild(new Switch()._render());
+        app.appendChild(new Switch()._render());
+
+    </script>
+
+</body>
+</html>
